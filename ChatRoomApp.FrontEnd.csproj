@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatRoomApp.BackEnd\ChatRoomApp.BackEnd.csproj" />
+    <ProjectReference Include="..\ChatRoomApp.DataBase\ChatRoomApp.DataBase.sqlproj" />
+  </ItemGroup>
+
 </Project>
