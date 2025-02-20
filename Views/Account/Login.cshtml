@@ -1,0 +1,178 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="card">
+    <h2 id="LogInHeader">Sign In</h2>
+
+    <!-- Toggle between Login and Register -->
+    <div>
+        <button id="toggleForm" class="btn" onclick="toggleForms()">Don't have an account? Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+        <form id="loginFormSubmit" method="post">
+            <div class="form-group">
+                <label for="userName">Username</label>
+                <input type="text" id="userName" name="userName" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn">Sign in</button>
+        </form>
+
+        <div id="loginErrorMessages" class="alert mt-2" style="display: none;"></div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" style="display: none;">
+        <form id="registerFormSubmit" method="post">
+            <div class="form-group">
+                <label for="registerUserName">Username</label>
+                <input type="text" id="registerUserName" name="userName" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" name="password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn">Sign up</button>
+        </form>
+
+        <!-- Registration Error Messages -->
+        <div id="registerErrorMessages" class="alert mt-2" style="display: none;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleForms() {
+            var loginForm = document.getElementById("loginForm");
+            var registerForm = document.getElementById("registerForm");
+            var toggleButton = document.getElementById("toggleForm");
+            var loginHeader = document.getElementById("LogInHeader");
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+                toggleButton.textContent = "Don't have an account? Sign Up";
+                loginHeader.textContent = "Sign In";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+                toggleButton.textContent = "Already have an account? Sign In";
+                loginHeader.textContent = "Sign Up";
+            }
+        }
+
+        $("#loginFormSubmit").submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Login")',
+                data: formData,
+                success: function(response) {
+                    if (response.data == "True") {
+                        window.location.href = '@Url.Action("Index", "Home")';
+                        $("#loginErrorMessages").hide();
+                    } else {
+                        $("#loginErrorMessages").text("Invalid user name or password").show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred: " + error);
+                }
+            });
+        });
+
+        $("#registerFormSubmit").submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Register")',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        toggleForms();
+                        $("#registerErrorMessages").hide();
+                    } else {
+                        $("#registerErrorMessages").text(response.data).show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred: " + error);
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    body {
+        background-color: #000;
+        color: #00FF00;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .card {
+        background-color: #111;
+        border: 2px solid #00FF00;
+        padding: 20px;
+        margin: 50px auto;
+        width: 300px;
+        text-align: center;
+    }
+
+    .btn {
+        background-color: #000;
+        color: #00FF00;
+        border: 2px solid #00FF00;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+        .btn:hover {
+            background-color: #00FF00;
+            color: #000;
+        }
+
+    .form-control {
+        background-color: #000;
+        color: #00FF00;
+        border: 2px solid #00FF00;
+        padding: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .alert {
+        background-color: #FF0000;
+        color: #FFF;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #LogInHeader {
+        color: #00FF00;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    label {
+        color: #00FF00;
+        text-align: center;
+        font-size: 2em;
+    }
+</style>

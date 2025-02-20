@@ -1,11 +1,22 @@
-var builder = WebApplication.CreateBuilder(args);
+using ChatRoomApp.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddChatRoomApp(builder.Configuration.GetConnectionString("ChartRoomApp"));
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie(options =>
+                        {
+                            options.LoginPath = "/Account/Login";
+                            options.LogoutPath = "/Account/Logout";
+                            options.AccessDeniedPath = "/Account/Login";
+                        });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -15,14 +26,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Account}/{action=Login}/{id?}")
     .WithStaticAssets();
 
 

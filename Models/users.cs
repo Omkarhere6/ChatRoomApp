@@ -9,6 +9,7 @@ namespace ChatRoomApp.Models
     {
         public int user_id { get; set; }
         public string user_name { get; set; }
+        public string password { get; set; }
         public DateTime? created_datetime { get; set; }
     }
 }

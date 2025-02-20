@@ -24,11 +24,15 @@ namespace ChatRoomApp.Models
             modelBuilder.Entity<users>(entity =>
             {
                 entity.HasKey(e => e.user_id)
-                    .HasName("PK__users__B9BE370FBAA0250A");
+                    .HasName("PK__users__B9BE370FD18A97E3");
 
                 entity.Property(e => e.created_datetime)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.password)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.user_name)
                     .IsRequired()

@@ -5,5 +5,6 @@ USE ChartRoomApp;
 CREATE TABLE users (
     user_id INT IDENTITY(1,1) PRIMARY KEY,
     user_name NVARCHAR(255) NOT NULL,
+    password NVARCHAR(255) NOT NULL, 
     created_datetime DATETIME DEFAULT GETDATE()
 );
