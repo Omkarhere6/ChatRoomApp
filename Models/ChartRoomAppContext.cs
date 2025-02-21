@@ -17,10 +17,33 @@ namespace ChatRoomApp.Models
         {
         }
 
+        public virtual DbSet<chatrooms> chatrooms { get; set; }
         public virtual DbSet<users> users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<chatrooms>(entity =>
+            {
+                entity.HasKey(e => e.room_id)
+                    .HasName("PK__chatroom__19675A8A6FE09D09");
+
+                entity.Property(e => e.room_code).HasMaxLength(255);
+
+                entity.Property(e => e.room_description).HasMaxLength(1000);
+
+                entity.Property(e => e.room_name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.room_type)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.user_name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
             modelBuilder.Entity<users>(entity =>
             {
                 entity.HasKey(e => e.user_id)

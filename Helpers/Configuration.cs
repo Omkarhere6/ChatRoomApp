@@ -11,6 +11,11 @@ namespace ChatRoomApp.Helpers
             {
                 return new UserDao(connectionString);
             });
+
+            services.AddTransient<IChatRoomsDao, ChatRoomsDao>(provider =>
+            {
+                return new ChatRoomsDao(connectionString);
+            });
         }
     }
 }

@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room Creation</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .card {
+            background-color: #111;
+            border: 2px solid #00FF00;
+            padding: 20px;
+            margin: 50px auto;
+            width: 300px;
+            text-align: center;
+        }
+
+        h2, h3 {
+            color: #00FF00;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background-color: #000;
+            color: #00FF00;
+            border: 2px solid #00FF00;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .btn:hover {
+                background-color: #00FF00;
+                color: #000;
+            }
+
+        .form-control {
+            background-color: #000;
+            color: #00FF00;
+            border: 2px solid #00FF00;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .alert {
+            background-color: #FF0000;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #chatPageHeader {
+            color: #00FF00;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        label {
+            color: #00FF00;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        #userChatRooms {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            #userChatRooms li {
+                margin-bottom: 10px;
+            }
+
+            #userChatRooms button {
+                width: 100%;
+                padding: 10px;
+                background-color: #000;
+                color: #00FF00;
+                border: 2px solid #00FF00;
+                cursor: pointer;
+            }
+
+                #userChatRooms button:hover {
+                    background-color: #00FF00;
+                    color: #000;
+                }
+
+        select.form-control {
+            margin-bottom: 20px;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .popup-content {
+            background-color: #111;
+            border: 2px solid #00FF00;
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .popup-close {
+            background-color: #000;
+            color: #00FF00;
+            border: 2px solid #00FF00;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .popup-close:hover {
+                background-color: #00FF00;
+                color: #000;
+            }
+
+        .radio-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- User Information Header -->
+    <div id="chatPageHeader">
+        <h2>@User.Identity.Name</h2>
+    </div>
+
+    <!-- Chat Room Section -->
+    <div class="card">
+        <h3>Create a Chat Room</h3>
+        <button class="btn" onclick="openPopup()">Create Room</button>
+    </div>
+
+    <!-- Popup Modal -->
+    <div class="popup" id="createRoomPopup">
+        <div class="popup-content">
+            <h3>Create a Chat Room</h3>
+
+            <!-- Form for creating chat room -->
+            <div class="form-group">
+                <label for="roomName">Chat Room Name</label>
+                <input type="text" id="roomName" class="form-control" placeholder="Enter room name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="roomDescription">Chat Room Description (Optional)</label>
+                <textarea id="roomDescription" class="form-control" placeholder="Enter room description (optional)"></textarea>
+            </div>
+
+            <!-- Public / Private radio buttons -->
+            <div class="form-group">
+                <label class="radio-label">
+                    <input type="radio" name="roomType" id="publicRoom" value="Public" checked>
+                    <span>Public Chat</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="roomType" id="privateRoom" value="Private">
+                    <span>Private Chat</span>
+                </label>
+            </div>
+
+            <!-- Button to create the room -->
+            <button class="btn" onclick="createRoom()">Create Room</button>
+
+            <!-- Close button -->
+            <button class="popup-close" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById("createRoomPopup").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("createRoomPopup").style.display = "none";
+        }
+
+        function createRoom() {
+            let chatRoomModel = { };
+                chatRoomModel.room_name = document.getElementById("roomName").value
+                chatRoomModel.room_description = document.getElementById("roomDescription").value;
+                chatRoomModel.room_type = document.getElementById("publicRoom").checked ? "Public" : "Private";
+                chatRoomModel.user_name = '@User.Identity.Name';
+            $.get({
+                url: '/ChatRooms/createChatRoom',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: chatRoomModel,
+                success: function (response) {
+                    closePopup();
+                },
+                error: function (response) {
+                },
+            });
+
+        }
+    </script>
+
+</body>
+</html>

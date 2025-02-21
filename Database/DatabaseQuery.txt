@@ -8,3 +8,12 @@ CREATE TABLE users (
     password NVARCHAR(255) NOT NULL, 
     created_datetime DATETIME DEFAULT GETDATE()
 );
+
+CREATE TABLE chatrooms (
+    room_id INT IDENTITY(1,1) PRIMARY KEY,
+    room_name NVARCHAR(255) NOT NULL,
+    room_description NVARCHAR(1000) NULL,
+    room_type NVARCHAR(100) NOT NULL,
+    room_code NVARCHAR(255) NULL,
+    user_name NVARCHAR(255) NOT NULL
+);

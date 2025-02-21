@@ -81,7 +81,7 @@
                 data: formData,
                 success: function(response) {
                     if (response.data == "True") {
-                        window.location.href = '@Url.Action("Index", "Home")';
+                        window.location.href = '@Url.Action("ChatRooms", "ChatRooms")';
                         $("#loginErrorMessages").hide();
                     } else {
                         $("#loginErrorMessages").text("Invalid user name or password").show();
