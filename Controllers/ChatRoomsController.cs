@@ -29,5 +29,17 @@ namespace ChatRoomApp.Controllers
                 return Json(new { data = "False" });
             }
         }
+
+        public IActionResult getPublicChatRooms()
+        {
+            try
+            {
+                return Json(new { data = _chatRoomsDao.getPublicChatRooms() });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "False" });
+            }
+        }
     }
 }

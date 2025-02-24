@@ -35,7 +35,8 @@
             background-color: #000;
             color: #00FF00;
             border: 2px solid #00FF00;
-            padding: 10px 20px;
+            padding: 20px ;
+            padding-bottom:20px;
             cursor: pointer;
             width: 100%;
         }
@@ -147,6 +148,22 @@
             align-items: center;
         }
 
+
+        /* Styling for the tabs */
+        .nav-tabs .nav-link {
+            background-color: #00FF00;
+            color: black;
+        }
+
+            .nav-tabs .nav-link.active {
+                background-color: #00CC00; /* Darker green for active tab */
+                color: white;
+            }
+
+        .tab-content {
+            padding-top: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -159,7 +176,8 @@
     <!-- Chat Room Section -->
     <div class="card">
         <h3>Create a Chat Room</h3>
-        <button class="btn" onclick="openPopup()">Create Room</button>
+        <button class="btn" onclick="openCreateRoomPopup()">Create Room</button>
+        <button class="btn" onclick="openJoinRoomPopup()">Join Room</button>
     </div>
 
     <!-- Popup Modal -->
@@ -194,16 +212,45 @@
             <button class="btn" onclick="createRoom()">Create Room</button>
 
             <!-- Close button -->
-            <button class="popup-close" onclick="closePopup()">Close</button>
+            <button class="popup-close" onclick="closeCreateRoomPopup()">Close</button>
+        </div>
+    </div>
+
+
+    <div class="popup" id="joinRoomPopup">
+        <div class="popup-content">
+            <h3>Join a Chat Room</h3>
+            <div class="container mt-5">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="PublicRooms-tab" data-bs-toggle="tab" href="#publicRooms" role="tab" aria-controls="home" aria-selected="true">Public</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="PrivateRooms-tab" data-bs-toggle="tab" href="#privateRooms" role="tab" aria-controls="profile" aria-selected="false">Private</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="publicRooms" role="tabpanel" aria-labelledby="home-tab">
+                        <h3>Public Rooms</h3>
+                        <p>This is the content for the Public tab.</p>
+                    </div>
+                    <div class="tab-pane fade" id="privateRooms" role="tabpanel" aria-labelledby="profile-tab">
+                        <h3>Private Rooms</h3>
+                        <p>This is the content for the Private tab.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="popup-close" onclick="closeJoinRoomPopup()">Close</button>
         </div>
     </div>
 
     <script>
-        function openPopup() {
+        function openCreateRoomPopup() {
             document.getElementById("createRoomPopup").style.display = "flex";
         }
 
-        function closePopup() {
+        function closeCreateRoomPopup() {
             document.getElementById("createRoomPopup").style.display = "none";
         }
 
@@ -219,13 +266,36 @@
                 dataType: 'json',
                 data: chatRoomModel,
                 success: function (response) {
-                    closePopup();
+                    closeCreateRoomPopup();
                 },
                 error: function (response) {
                 },
             });
 
         }
+    
+        function openJoinRoomPopup() {
+            document.getElementById("joinRoomPopup").style.display = "flex";
+        }
+
+        function closeJoinRoomPopup() {
+            document.getElementById("joinRoomPopup").style.display = "none";
+        }
+
+        getPublicChatRooms();
+        function getPublicChatRooms() {
+            $.ajax({
+                url: '/ChatRooms/getPublicChatRooms',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (response) {
+                },
+            });
+        }
+
     </script>
 
 </body>

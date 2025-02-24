@@ -38,6 +38,19 @@ namespace ChatRoomApp.Implementations
             }
         }
 
+        public async Task<chatrooms> getPublicChatRooms()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT * FROM Chatrooms";
+                var result = await connection.ExecuteScalarAsync<chatrooms>(query);
+
+                return result;
+            }
+        }
+
         public async Task<bool> CheckRoomCodeUnique(string roomCode)
         {
             using (var connection = new SqlConnection(_connectionString))
